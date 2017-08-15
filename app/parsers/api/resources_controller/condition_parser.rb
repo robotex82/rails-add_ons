@@ -10,8 +10,8 @@ module Api
         lt:       :<
       }
 
-      def initialize(field, condition)
-        @field, @condition = field, condition
+      def initialize(scope, field, condition)
+        @scope, @field, @condition = scope, field, condition
       end
 
       def condition_statement
@@ -23,7 +23,11 @@ module Api
       def build_condition_statement(parent_key, condition, nested = false)
         if is_a_condition?(parent_key) && !nested
           column, operator = extract_column_and_operator(parent_key)
-          ["#{column} = ?", condition]
+          if column_is_boolean?(column)
+            ["#{column} = ?", to_boolean(condition)]
+          else
+            ["#{column} = ?", condition]
+          end
         else
           if nested
             column = extract_column(parent_key)
@@ -58,6 +62,14 @@ module Api
 
       def operator_map
         OPERATOR_MAP
+      end
+
+      def column_is_boolean?(column_name)
+        @scope.columns_hash[column_name].type == :boolean
+      end
+
+      def to_boolean(string)
+        ActiveRecord::ConnectionAdapters::Column.value_to_boolean(string)
       end
     end
   end

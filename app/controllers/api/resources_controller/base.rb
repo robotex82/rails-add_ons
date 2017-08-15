@@ -120,7 +120,7 @@ module Api
             when 'includes'
               scope = scope.includes(condition.map(&:to_sym))
             else
-              condition_statement = ::Api::ResourcesController::ConditionParser.new(field, condition).condition_statement
+              condition_statement = ::Api::ResourcesController::ConditionParser.new(scope, field, condition).condition_statement
               scope = scope.where(condition_statement)
             end
           end
