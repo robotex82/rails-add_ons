@@ -4,6 +4,14 @@ Short description and motivation.
 ## Usage
 How to use my plugin.
 
+### with bootstrap-sass
+
+You have to add
+
+    //= require bootstrap-sprockets
+
+to your applications javascript include file to use bootstrap-sass.
+
 ## Installation
 Add this line to your application's Gemfile:
 
