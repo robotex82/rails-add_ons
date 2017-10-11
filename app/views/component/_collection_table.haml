@@ -2,19 +2,28 @@
   %thead
     %tr
       - columns.each do |name, options|
-        - title = if resource_class.respond_to?(:human_attribute_name)
-          - resource_class.human_attribute_name(name)
-        - else
-          - name
+        - title = options.delete(:title)
+        - if title.nil?
+          - if resource_class.respond_to?(:human_attribute_name)
+            - title = resource_class.human_attribute_name(name)
+          - else
+            - title = name
         - if options.has_key?(:sort)
           %td= sort_link(name, title, options[:sort])
         - else
           %td= title
   %tbody
     - collection.each do |resource|
-      %tr
+      - tr_options = { class: resource_class.name.underscore }
+      - if resource.respond_to?(:model_name)
+        - tr_options[:id] = dom_id(resource)
+      - else
+        - tr_options[:id] = "#{resource.class.name.underscore}-#{resource.object_id}"
+      %tr{ tr_options }
         - columns.each do |name, options|
+          - td_options = { class: "attribute-#{name}", id: "#{tr_options[:id]}-#{name}"}
           - if options[:block].present?
-            %td= options[:block].call(resource)
+            %td{ td_options }= options[:block].call(resource)
           - else
-            %td= resource.send(name)
+            %td{ td_options }= resource.send(name)
+
