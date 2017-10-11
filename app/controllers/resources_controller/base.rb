@@ -106,19 +106,23 @@ module ResourcesController
       private
 
       def new_resource_path
-        url_for(action: :new, only_path: true)
+        resource_router.send(:url_for, { action: :new, only_path: true })
       end
 
       def collection_path
-        url_for(action: :index, only_path: true)
+        resource_router.send(:url_for, { action: :index, only_path: true })
       end
 
       def resource_path(resource)
-        url_for(action: :show, id: resource, only_path: true)
+        resource_router.send(:url_for, { action: :show, id: resource, only_path: true })
       end
 
       def edit_resource_path(resource)
-        url_for(action: :edit, id: resource, only_path: true)
+        resource_router.send(:url_for, { action: :edit, id: resource, only_path: true })
+      end
+
+      def resource_router
+        self
       end
     end
 
