@@ -32,7 +32,11 @@ module Rails
 
           def output(what)
             @messages << what
-            puts what
+            puts what unless silenced?
+          end
+
+          def silenced?
+            !!@options[:silence]
           end
 
           def copy_messages_to_result
