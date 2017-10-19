@@ -17,9 +17,9 @@ module Component
       @columns[name] = options
     end
 
-    def timestamps
-      column(:created_at)
-      column(:updated_at)
+    def timestamps(options = {})
+      column(:created_at, options)
+      column(:updated_at, options)
     end
 
     def association(name, options = {}, &block)
