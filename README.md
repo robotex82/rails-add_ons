@@ -12,6 +12,14 @@ You have to add
 
 to your applications javascript include file to use bootstrap-sass.
 
+### Update path to 1.0.0
+
+You may want to add
+
+    //= require tether
+
+to your applications javascript include file, as it was removed.
+
 ## Installation
 Add this line to your application's Gemfile:
 
