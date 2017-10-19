@@ -31,20 +31,24 @@ module ResourcesController::RestActions
     else
       @resource.update(permitted_params)
     end
-    respond_with @resource
+    respond_with(respond_with_namespace, @resource)
   end
 
   def destroy
     @resource.destroy
-    respond_with @resource
+    respond_with(respond_with_namespace, @resource)
   end
 
   def create
     @resource.save
-    respond_with @resource
+    respond_with(respond_with_namespace, @resource)
   end
 
   private
+
+  def respond_with_namespace
+    nil
+  end
 
   def after_create_location
     ->(controller) { resource_path(@resource) }
@@ -52,27 +56,28 @@ module ResourcesController::RestActions
 
   def load_collection_scope
     resource_class
-      end
-      def load_collection
-        @collection = load_collection_scope.all
-      end
+  end
 
-      def load_resource_scope
-        resource_class
-      end
-      def load_resource
-        @resource = load_resource_scope.find(params[:id])
-      end
+  def load_collection
+    @collection = load_collection_scope.all
+  end
 
-      def initialize_resource
-        @resource = resource_class.new
-      end
+  def load_resource_scope
+    resource_class
+  end
+  def load_resource
+    @resource = load_resource_scope.find(params[:id])
+  end
 
-      def initialize_resource_for_create
-        @resource = resource_class.new(permitted_params)
-      end
+  def initialize_resource
+    @resource = resource_class.new
+  end
 
-      def permitted_params
-        raise "not implemented"
-      end
+  def initialize_resource_for_create
+    @resource = resource_class.new(permitted_params)
+  end
+
+  def permitted_params
+    raise "not implemented"
+  end
 end
