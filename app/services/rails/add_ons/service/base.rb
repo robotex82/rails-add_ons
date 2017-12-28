@@ -72,7 +72,7 @@ module Rails
           private
 
           def initialize_result
-            @result = result_class.new
+            @result = result_class.new(self)
           end
 
           def perform_result
@@ -102,12 +102,44 @@ module Rails
               @errors.add(key_prefix, message)
             end
           end
+
+          def add_error_and_say(attribute, message)
+            @errors.add(attribute, message)
+            say(message)
+          end
+        end
+
+        module Autosave
+          extend ActiveSupport::Concern
+
+          class_methods do
+            def call!(*args)
+              new(*args).autosave!.perform
+            end
+          end
+
+          def autosave?
+            !!@options[:autosave]
+          end
+
+          def autosave!
+            @options[:autosave] = true
+            self
+          end
+        end
+
+        module Internationalization
+          def t(key, options)
+            I18n.t("activemodel.#{self.class.name.underscore}#{key}", options)
+          end
         end
 
         include Errors
         include Resultable
         include Callbacks
         include Rails::AddOns::Service::Messages
+        include Autosave
+        include Internationalization
       end
     end
   end

@@ -2,7 +2,17 @@ module Rails
   module AddOns
     module Service::Result
       class Base
-        attr_reader :messages, :errors
+        extend ActiveModel::Translation
+        
+        attr_reader :messages, :errors, :service
+
+        def initialize(service)
+          @service = service
+        end
+
+        def model_name
+          @service.model_name
+        end
 
         module Succeedable
           def success?

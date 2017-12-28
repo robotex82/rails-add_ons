@@ -12,13 +12,13 @@ module Rails
             @indent ||= 0
             if block_given?
               @indent += 1
-              output "#{output_prefix}#{("  " * @indent)}#{what}..."
+              output(_message("#{output_prefix}#{("  " * @indent)}#{what}...", level: @indent))
               block_result = yield
               say_done
               @indent -= 1
               block_result
             else
-              output "#{output_prefix}#{("  " * @indent)}#{what}"
+              output(_message("#{output_prefix}#{("  " * @indent)}#{what}", level: @indent))
             end
           end
 
@@ -41,6 +41,10 @@ module Rails
 
           def copy_messages_to_result
             @result.instance_variable_set(:@messages, @messages)
+          end
+
+          def _message(content, options = {})
+            Rails::AddOns::Service::Message::Base.new(content, level: options[:level])
           end
         end
       end
