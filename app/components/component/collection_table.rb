@@ -9,7 +9,7 @@ module Component
       super
       @columns        = {}
       @collection     = @options.delete(:collection)
-      @resource_class = @collection.first.class
+      @resource_class = @options.delete(:resource_class) || @collection.first.class
     end
 
     def column(name, options = {}, &block)
