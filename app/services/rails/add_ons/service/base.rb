@@ -112,9 +112,17 @@ module Rails
         module Autosave
           extend ActiveSupport::Concern
 
-          class_methods do
-            def call!(*args)
-              new(*args).autosave!.perform
+          if respond_to?(:class_methods)
+            class_methods do
+              def call!(*args)
+                new(*args).autosave!.perform
+              end
+            end
+          else
+            module ClassMethods
+              def call!(*args)
+                new(*args).autosave!.perform
+              end
             end
           end
 
