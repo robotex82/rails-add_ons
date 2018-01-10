@@ -7,7 +7,9 @@ module Api
         eq:       :'=',
         not_eq:   :'<>',
         lt_or_eq: :<=,
-        lt:       :<
+        lt:       :<,
+        null:     :is_null,
+        not_null: :is_not_null
       }
 
       def initialize(scope, field, condition)
@@ -23,6 +25,7 @@ module Api
       def build_condition_statement(parent_key, condition, nested = false)
         if is_a_condition?(parent_key) && !nested
           column, operator = extract_column_and_operator(parent_key)
+          return handle_null_condition(column, operator) if is_null_operator?(operator)
           if column_is_boolean?(column)
             ["#{column} = ?", to_boolean(condition)]
           else
@@ -35,6 +38,19 @@ module Api
           else
             { parent_key => build_condition_statement(condition.first[0], condition.first[1], true) }
           end
+        end
+      end
+
+      def is_null_operator?(operator)
+        %w(null not_null).include?(operator)
+      end
+
+      def handle_null_condition(column, operator)
+        case operator.to_sym
+        when :null
+          "#{column} IS NULL"
+        when :not_null
+          "#{column} IS NOT NULL"
         end
       end
 
@@ -65,7 +81,18 @@ module Api
       end
 
       def column_is_boolean?(column_name)
-        @scope.columns_hash[column_name].type == :boolean
+        scope, column = get_scope_and_column_from_column_name(column_name)
+        scope.columns_hash[column].type == :boolean
+      end
+
+      def get_scope_and_column_from_column_name(column_name)
+        if column_name =~ /(.*)\.(.*)/
+          tables_and_classes = @scope.reflect_on_all_associations.each_with_object({}) { |a, memo| memo[a.table_name] = a.klass }
+          scope = tables_and_classes[$~[1]]
+          return scope, $~[2]
+        else
+          return @scope, column_name
+        end
       end
 
       def to_boolean(string)

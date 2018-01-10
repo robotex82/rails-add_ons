@@ -67,7 +67,7 @@ module Component
     end
 
     def table_css_classes
-      classes = ['table', 'collection-table', @resource_class.name.underscore.pluralize]
+      classes = ['table', 'collection-table', @resource_class.name.underscore.pluralize.gsub('/', '-')]
       classes << 'table-bordered'   if bordered?
       classes << 'table-hover'      if hover?
       classes << 'table-inverse'    if inverse?

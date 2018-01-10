@@ -6,6 +6,8 @@
       = fa_icon(:plus)
       = t('.new')
 
+= render 'before_index_table', collection: @collection
+
 = collection_table(collection: @collection, resource_class: resource_class) do |t|
   = render 'table',         table: t
   = render 'table_actions', table: t

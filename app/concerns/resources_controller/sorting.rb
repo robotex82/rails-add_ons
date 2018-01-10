@@ -7,7 +7,17 @@ module ResourcesController::Sorting
 
   def add_order_scope(base_scope)
     if params[:sort_by].present?
-      base_scope.order(params[:sort_by] => (params[:sort_direction] || :asc))
+      if params[:sort_by].include?(' ') || params[:sort_direction].include?(' ')
+        raise "Possible SQL Injection attempt while trying to sort by #{params[:sort_by]} #{params[:sort_direction]}"
+      end
+
+      sort_direction = (params[:sort_direction] || :asc)
+
+      if Rails.version < '4.0.0'
+        base_scope.order("#{params[:sort_by]} #{sort_direction}")
+      else
+        base_scope.order(params[:sort_by] => sort_direction)
+      end
     else
       base_scope
     end

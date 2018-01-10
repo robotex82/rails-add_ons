@@ -14,11 +14,11 @@
           %td= title
   %tbody
     - collection.each do |resource|
-      - tr_options = { class: resource_class.name.underscore }
+      - tr_options = { class: resource_class.name.underscore.gsub('/', '-') }
       - if resource.respond_to?(:model_name)
         - tr_options[:id] = dom_id(resource)
       - else
-        - tr_options[:id] = "#{resource.class.name.underscore}-#{resource.object_id}"
+        - tr_options[:id] = "#{resource.class.name.underscore.gsub('/', '-')}-#{resource.object_id}"
       %tr{ tr_options }
         - columns.each do |name, options|
           - td_options = { class: "attribute-#{name}", id: "#{tr_options[:id]}-#{name}"}
