@@ -2,9 +2,8 @@ module Controller::QueryConditions
   private
 
   def add_conditions_from_query(scope)
-    request.query_parameters.each do |field, condition|
+    query_params.each do |field, condition|
       case field
-      when 'sort_by', 'sort_direction', 'utf8', 'commit', 'page'
       when 'limit'
         scope = scope.limit(condition.to_i)
       when 'offset'
@@ -19,5 +18,17 @@ module Controller::QueryConditions
       end
     end
     scope
+  end
+
+  def query_params
+    default_query_params
+  end
+
+  def default_query_params
+    request.query_parameters.except(*default_query_params_exceptions)
+  end
+
+  def default_query_params_exceptions
+    %w(sort_by sort_direction utf8 commit page)
   end
 end
