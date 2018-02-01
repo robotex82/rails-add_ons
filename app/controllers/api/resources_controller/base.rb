@@ -119,6 +119,10 @@ module Api
               scope = scope.order(condition)
             when 'includes'
               scope = scope.includes(condition.map(&:to_sym))
+            when 'scopes'
+              condition.each do |scope_name|
+                scope = scope.send(scope_name.to_sym)
+              end
             else
               condition_statement = ::Api::ResourcesController::ConditionParser.new(scope, field, condition).condition_statement
               scope = scope.where(condition_statement)
@@ -153,9 +157,7 @@ module Api
 
         def serialize_collection(collection)
           collection.collect do |resource|
-            json = resource.as_json
-            json[:errors] = serialize_errors(resource.errors) if resource.errors.any?
-            json
+            serialize_resource(resource)
           end
         end
 
