@@ -25,7 +25,7 @@ module Rails
           end
 
           @view_context = view_context
-          @column_name  = column_name
+          @column_name  = @options[:column_name] || column_name
           @title        = title
 
           if h.params[:sort_direction].present?
