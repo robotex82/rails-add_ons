@@ -49,7 +49,7 @@ module Rails
         end
 
         def perform
-          h.link_to(@title_with_arrow, h.url_for(sort_by: @column_name, sort_direction: @sort_direction))
+          h.link_to(@title_with_arrow, h.url_for(h.request.query_parameters.merge(sort_by: @column_name, sort_direction: @sort_direction)))
         end
 
         private
