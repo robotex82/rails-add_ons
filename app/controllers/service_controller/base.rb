@@ -5,7 +5,7 @@ module ServiceController
     include ServiceController::Service
     include ServiceController::RestActions
     include ServiceController::RestServiceUrls
-    include ServiceController::ResourceInflections
+    include ServiceController::ServiceInflections
     include ServiceController::LocationHistory
   end
 end
