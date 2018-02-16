@@ -59,11 +59,11 @@ module ServiceController::RestActions
   end
 
   def initialize_service_for_invoke
-    service_class.new
+    @service = service_class.new
   end
 
   def initialize_service_for_call
-    service_class.new(hashified_params)
+    @service = service_class.new(hashified_params)
   end
 
   def permitted_params
