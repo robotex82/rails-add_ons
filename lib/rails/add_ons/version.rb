@@ -1,5 +1,5 @@
 module Rails
   module AddOns
-    VERSION = '1.5.2'.freeze
+    VERSION = '2.0.0'.freeze
   end
 end
