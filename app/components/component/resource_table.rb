@@ -12,6 +12,16 @@ module Component
       @rows[name] = options
     end
 
+    def timestamps(options = {})
+      row(:created_at, options)
+      row(:updated_at, options)
+    end
+
+    def association(name, options = {}, &block)
+      options.reverse_merge!(block: block) if block_given?
+      @rows[name] = options
+    end
+
     private
 
     def view_locals

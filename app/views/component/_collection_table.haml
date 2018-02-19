@@ -25,5 +25,8 @@
           - if options[:block].present?
             %td{ td_options }= options[:block].call(resource)
           - else
-            %td{ td_options }= resource.send(name)
-
+            %td{ td_options }
+              - if options[:label_method].present?
+                = resource.send(name).send(options[:label_method])
+              - else
+                = resource.send(name)

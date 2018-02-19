@@ -31,27 +31,35 @@ module ResourcesController::RestActions
     else
       @resource.update(permitted_params)
     end
-    respond_with(respond_with_namespace, @resource)
+    if respond_to?(:after_update_location, true)
+      respond_with(respond_with_namespace, @resource, location: after_update_location)
+    else
+      respond_with(respond_with_namespace, @resource)
+    end
   end
 
   def destroy
     @resource.destroy
-    respond_with(respond_with_namespace, @resource)
+    if respond_to?(:after_destroy_location, true)
+      respond_with(respond_with_namespace, @resource, location: after_destroy_location)
+    else
+      respond_with(respond_with_namespace, @resource)
+    end
   end
 
   def create
     @resource.save
-    respond_with(respond_with_namespace, @resource)
+    if respond_to?(:after_create_location, true)
+      respond_with(respond_with_namespace, @resource, location: after_create_location)
+    else
+      respond_with(respond_with_namespace, @resource)
+    end
   end
 
   private
 
   def respond_with_namespace
     nil
-  end
-
-  def after_create_location
-    ->(controller) { resource_path(@resource) }
   end
 
   def load_collection_scope
