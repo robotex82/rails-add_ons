@@ -20,6 +20,10 @@ You may want to add
 
 to your applications javascript include file, as it was removed.
 
+### Update path to 2.0.0
+
+ServiceController::Base now uses the verbs new and create instead of invoke and call. Furthermore @resource is dropped in favor of @service. Please modify your controllers and views and routing accordingly.
+
 ## Installation
 Add this line to your application's Gemfile:
 
