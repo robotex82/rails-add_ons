@@ -6,40 +6,40 @@ module ServiceController::RestActions
     responders :flash
 
     if respond_to?(:before_action)
-      before_action :initialize_service_for_invoke, only: [:invoke]
-      before_action :initialize_service_for_call, only: [:call]
+      before_action :initialize_service, only: [:new]
+      before_action :initialize_service_for_create, only: [:create]
     else
-      before_filter :initialize_service_for_invoke, only: [:invoke]
-      before_filter :initialize_service_for_call, only: [:call]
+      before_filter :initialize_service, only: [:new]
+      before_filter :initialize_service_for_create, only: [:create]
     end
   end
 
-  def index
-  end
+  def new; end
 
-  def invoke
-    respond_with @service
-  end
-
-  def call
-    @result = execute_service
-    if @result.success?
-
-      if respond_to?(:after_success_location)
-        redirect_to(after_success_location, notice: success_message)
-      else
-        flash.now[:success] = success_message
-        render :success
-      end
-    else
-      render :invoke
-    end
+  def create
+    perform
   end
 
   private
 
+  def perform
+    @result = execute_service
+    if @result.success?
+
+      if respond_to?(:after_success_location, true)
+        redirect_to(after_success_location, notice: success_message)
+      else
+        flash.now[:success] = success_message
+        render :create
+      end
+    else
+      render :new
+    end
+  end
+
+
   def success_message
-    t('flash.actions.perform.notice', resource_name: @resource.class.model_name.human)
+    t('flash.actions.perform.notice', resource_name: @service.class.model_name.human)
   end
 
   def execute_service
@@ -58,15 +58,23 @@ module ServiceController::RestActions
     end
   end
 
-  def initialize_service_for_invoke
-    @service = service_class.new
+  def initialize_service
+    @service = service_class.new({}, service_options)
   end
 
-  def initialize_service_for_call
-    @service = service_class.new(hashified_params)
+  def initialize_service_for_create
+    @service = service_class.new(hashified_params, service_options)
+  end
+
+  def service_options
+    default_options
+  end
+
+  def default_options
+    { autosave: true }
   end
 
   def permitted_params
-    raise "Not implemented"
+    raise "You have to implement permitted_params in #{self.class.name}."
   end
 end
