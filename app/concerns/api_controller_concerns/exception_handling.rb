@@ -6,9 +6,19 @@ module ApiControllerConcerns
       rescue_from Exception do |exception|
         handle_exception(exception)
       end
+
+      rescue_from ActiveRecord::RecordNotFound do |exception|
+        handle_404(exception)
+      end
     end
 
     private
+
+    def handle_404(exception = nil)
+      respond_to do |format|
+        format.json { render json: { error: (exception.try(:message) || 'Not found') }, status: 404 }
+      end
+    end
 
     def handle_exception(exception)
       if Rails.env.development? || Rails.env.test?
