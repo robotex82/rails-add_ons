@@ -12,12 +12,7 @@ module ResourcesController::Sorting
       end
 
       sort_direction = (params[:sort_direction] || :asc)
-
-      if Rails.version < '4.0.0'
-        base_scope.order("#{params[:sort_by]} #{sort_direction}")
-      else
-        base_scope.order(params[:sort_by] => sort_direction)
-      end
+      base_scope.reorder("#{params[:sort_by]} #{sort_direction}")
     else
       base_scope
     end

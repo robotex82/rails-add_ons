@@ -26,7 +26,4 @@
             %td{ td_options }= options[:block].call(resource)
           - else
             %td{ td_options }
-              - if options[:label_method].present?
-                = resource.send(name).send(options[:label_method])
-              - else
-                = resource.send(name)
+              = render partial: "component/table/body_cells/#{options[:render_as]}", locals: { resource: resource, name: name, options: options }

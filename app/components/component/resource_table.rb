@@ -1,5 +1,7 @@
 module Component
   class ResourceTable < Base
+    attr_reader :resource
+
     def initialize(*args)
       super
       @rows           = {}
@@ -8,18 +10,24 @@ module Component
     end
 
     def row(name, options = {}, &block)
+      options.reverse_merge!(render_as: :default)
       options.reverse_merge!(block: block) if block_given?
       @rows[name] = options
+    end
+
+    def timestamp(name, options = {}, &block)
+      options.reverse_merge!(render_as: :timestamp, format: nil)
+      row(name, options, &block)
     end
 
     def timestamps(options = {})
-      row(:created_at, options)
-      row(:updated_at, options)
+      timestamp(:created_at, options)
+      timestamp(:updated_at, options)
     end
 
     def association(name, options = {}, &block)
-      options.reverse_merge!(block: block) if block_given?
-      @rows[name] = options
+      options.reverse_merge!(render_as: :association)
+      row(name, options, &block)
     end
 
     private

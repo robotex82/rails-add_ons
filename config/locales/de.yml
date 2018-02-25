@@ -3,6 +3,8 @@ de:
     i18n: Sprache
   component:
     collection_table:
+      column_titles:
+        awesome_nested_set: Sortieren
       delete: Löschen
       edit: Bearbeiten
       show: Anzeigen

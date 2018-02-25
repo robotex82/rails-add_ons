@@ -1,5 +1,7 @@
 module Component
   class CollectionTable < Base
+    include AwesomeNestedSetConcern
+
     SIZE_MAP = {
       default: nil,
       small:   :sm
@@ -13,18 +15,23 @@ module Component
     end
 
     def column(name, options = {}, &block)
+      options.reverse_merge!(render_as: :default)
       options.reverse_merge!(block: block) if block_given?
       @columns[name] = options
+    end
+    def timestamp(name, options = {}, &block)
+      options.reverse_merge!(render_as: :timestamp, format: nil)
+      column(name, options, &block)
     end
 
     def timestamps(options = {})
-      column(:created_at, options)
-      column(:updated_at, options)
+      timestamp(:created_at, options)
+      timestamp(:updated_at, options)
     end
 
     def association(name, options = {}, &block)
-      options.reverse_merge!(block: block) if block_given?
-      @columns[name] = options
+      options.reverse_merge!(render_as: :association)
+      column(name, options, &block)
     end
 
     private
@@ -75,6 +82,10 @@ module Component
       classes << 'table-responsive' if responsive?
       classes << "table-#{size}"    if size.present?
       classes
+    end
+
+    def t(key, options = {})
+      I18n.t("#{self.class.name.underscore.gsub('/', '.')}#{key}", options)
     end
   end
 end
