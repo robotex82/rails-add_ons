@@ -1,5 +1,5 @@
 - label = if options[:label_method].present?
-  - resource.send(name).send(options[:label_method])
+  - resource.send(name).try(options[:label_method])
 - else
   - resource.send(name)
 - link_to = options[:link_to]
