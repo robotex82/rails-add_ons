@@ -19,6 +19,7 @@ module Component
       options.reverse_merge!(block: block) if block_given?
       @columns[name] = options
     end
+
     def timestamp(name, options = {}, &block)
       options.reverse_merge!(render_as: :timestamp, format: nil)
       column(name, options, &block)
