@@ -1,6 +1,9 @@
 module Component
   class CollectionTable < Base
     include AwesomeNestedSetConcern
+    include ActsAsPublishedConcern
+    include ActsAsListConcern
+    include BatchActionsConcern
 
     SIZE_MAP = {
       default: nil,
@@ -9,6 +12,8 @@ module Component
 
     def initialize(*args)
       super
+      @options.reverse_merge!(header: true)
+
       @columns        = {}
       @collection     = @options.delete(:collection)
       @resource_class = @options.delete(:resource_class) || @collection.first.class
@@ -18,6 +23,10 @@ module Component
       options.reverse_merge!(render_as: :default)
       options.reverse_merge!(block: block) if block_given?
       @columns[name] = options
+    end
+
+    def id(options = {}, &block)
+      column(:id, options, &block)
     end
 
     def timestamp(name, options = {}, &block)
@@ -46,8 +55,13 @@ module Component
         columns:           @columns,
         collection:        @collection,
         resource_class:    @resource_class,
-        table_css_classes: table_css_classes
+        table_css_classes: table_css_classes,
+        show_header:       show_header
       }
+    end
+
+    def show_header
+      !!@options[:header]
     end
 
     def striped?

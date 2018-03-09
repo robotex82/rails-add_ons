@@ -4,10 +4,16 @@ de:
   component:
     collection_table:
       column_titles:
-        awesome_nested_set: Sortieren
-      delete: Löschen
+        acts_as_list: Sortierung
+        acts_as_published: Veröffentlichung
+        awesome_nested_set: Sortierung
+      destroy: Löschen
       edit: Bearbeiten
       show: Anzeigen
+    table:
+      header_cells:
+        batch_actions:
+          destroy: Löschen
   flash:
     actions:
       create:
@@ -20,6 +26,11 @@ de:
       perform:
         notice: "%{resource_name} wurde ausgeführt."
         alert: "%{resource_name} konnte nicht ausgeführt werden. Es traten folgende Fehler auf: %{errors}"
+      toggle_published:
+        published:
+          notice: "%{resource_name} veröffentlicht."
+        unpublished:
+          notice: "%{resource_name} zurückgezogen."
   i18n:
     locales:
       en: English

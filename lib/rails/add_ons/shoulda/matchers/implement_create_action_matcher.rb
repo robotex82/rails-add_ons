@@ -15,6 +15,33 @@ module Rails
         #      }
         #    end
         #
+        # The newly created resource is found by calling @resource_class.last.
+        # If you need to change this you can call #finding_created_resource_with.
+        #
+        # Example:
+        #
+        #     RSpec.describe '/posts', type: :feature do
+        #       it {
+        #         expect(subject).to implement_create_action(self)
+        #           .for(resource_class)
+        #           .within_form('#new_user') {
+        #             # fill the needed form inputs via capybara here
+        #             #
+        #             # Example:
+        #             #
+        #             #     select 'de', from: 'slider[locale]'
+        #             #     fill_in 'slider[name]', with: 'My first slider'
+        #             #     check 'slider[auto_start]'
+        #             #     fill_in 'slider[interval]', with: '3'
+        #             fill_in 'user[email]', with: 'jane.doe@local.domain'
+        #             fill_in 'user[password]', with: 'password'
+        #             fill_in 'user[password_confirmation]', with: 'password'
+        #           }
+        #           .finding_created_resource_with{ Ecm::UserArea::User.order(created_at: :desc).first }
+        #           .increasing{ Ecm::UserArea::User.count }.by(1)
+        #       }
+        #     end
+        #
         def implement_create_action(spec)
           ImplementCreateActionMatcher.new(spec)
         end
@@ -54,6 +81,11 @@ module Rails
             self
           end
 
+          def finding_created_resource_with(&block)
+            @created_resource_finder_block = block
+            self
+          end
+
           def matches?(base_path)
             @base_path = base_path
             @new_path = "#{@base_path}/new"
@@ -67,11 +99,11 @@ module Rails
             end
             @after_count = @block.call(@resource_class)
 
-            has_correct_status_code && has_correct_current_path && has_increased_resource_count
+            has_correct_status_code && has_increased_resource_count && has_correct_current_path
           end
 
           def created_resource
-            @created_resource ||= @resource_class.first
+            @created_resource ||= @created_resource_finder_block.present? ? @created_resource_finder_block.call : @resource_class.last
           end
 
           def expected_path
@@ -88,10 +120,10 @@ module Rails
           end
 
           def has_increased_resource_count
-            if (@before_count + @after_count) == @expected_increase
+            if (@after_count - @before_count) == @expected_increase
               true
             else
-              @error = "Did not increase by expected [#{@expected_increase}] but by [#{@before_count + @after_count}]"
+              @error = "Did not increase by expected [#{@expected_increase}] but by [#{@after_count - @before_count}]"
               false
             end
           end

@@ -7,11 +7,14 @@ module ResourcesController::LocationHistory
     else
       before_filter :store_location
     end
+
+    helper_method :last_location
   end
 
   private
 
   def store_location
+    return if request.referer.nil?
     truncate_location_history(9)
     location_history[Time.zone.now] = request.referer
   end

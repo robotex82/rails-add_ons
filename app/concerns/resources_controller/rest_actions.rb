@@ -31,6 +31,7 @@ module ResourcesController::RestActions
     else
       @resource.update(permitted_params)
     end
+
     if respond_to?(:after_update_location, true)
       respond_with(respond_with_namespace, @resource, location: after_update_location)
     else
@@ -73,6 +74,7 @@ module ResourcesController::RestActions
   def load_resource_scope
     resource_class
   end
+
   def load_resource
     @resource = load_resource_scope.find(params[:id])
   end

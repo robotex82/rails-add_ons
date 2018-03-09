@@ -15,6 +15,10 @@ module Component
       @rows[name] = options
     end
 
+    def id(options = {}, &block)
+      row(:id, options, &block)
+    end
+
     def timestamp(name, options = {}, &block)
       options.reverse_merge!(render_as: :timestamp, format: nil)
       row(name, options, &block)

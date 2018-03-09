@@ -3,7 +3,10 @@ en:
     i18n: Language
   component:
     collection_table:
-      delete: Delete
+      column_titles:
+        acts_as_published: Publishing
+        awesome_nested_set: Sorting
+      destroy: Delete
       edit: Edit
       show: Show
   flash:

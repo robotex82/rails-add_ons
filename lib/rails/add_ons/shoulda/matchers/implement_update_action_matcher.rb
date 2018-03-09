@@ -2,7 +2,7 @@ module Rails
   module AddOns
     module Shoulda
       module Matchers
-        # Example:
+        # Example checking for changed resource attributes:
         #
         #    RSpec.describe '/posts', type: :feature do
         #      let(:post) { create(:post) }
@@ -13,9 +13,26 @@ module Rails
         #            fill_in 'post[title]', with: 'New title'
         #            fill_in 'post[body]',  with: 'New body'
         #          }
-        #          .updating{ |resource| resource.attributes }
+        #          .updating
         #          .from(post.attributes)
         #          .to({ 'title' => 'New title', 'body' => 'New body' })
+        #      }
+        #    end
+        #
+        # Example checking for changed state:
+        #
+        #    RSpec.describe '/posts', type: :feature do
+        #      let(:post) { create(:post) }
+        #      it {
+        #        expect(subject).to implement_update_action(self)
+        #          .for(post)
+        #          .within_form('.edit_post') {
+        #            fill_in 'post[title]', with: 'New title'
+        #            fill_in 'post[body]',  with: 'New body'
+        #          }
+        #          .updating{ |resource| resource.updated_by }
+        #          .from(nil)
+        #          .to(User.current)
         #      }
         #    end
         #
@@ -36,13 +53,13 @@ module Rails
             self
           end
 
-          def from(attributes)
-            @expected_before_attributes = attributes
+          def from(value)
+            @from = value
             self
           end
 
-          def to(attributes)
-            @expected_after_attributes = attributes
+          def to(value)
+            @to = value
             self
           end
 
@@ -54,7 +71,7 @@ module Rails
           end
 
           def updating(&block)
-            @block = block
+            @updating_block = block if block_given?
             self
           end
 
@@ -102,22 +119,48 @@ module Rails
           end
 
           def has_correct_attributes_before
-            sliced_resource_attributes = @resource.attributes.with_indifferent_access.slice(*@expected_before_attributes.keys)
-            if @expected_before_attributes == sliced_resource_attributes
-              true
+            expected = @from
+            if @updating_block.present?
+              given = @updating_block.call(@resource)
+
+              if given == expected
+                return true
+              else
+                @error = "Before update state [#{given.inspect}] did not match expected [#{expected.inspect}]"
+                return false
+              end
             else
-              @error = "Attributes before update [#{sliced_resource_attributes}] did not match expected attributes [#{@expected_before_attributes}]"
-              false
+              given = @resource.attributes.with_indifferent_access.slice(*@expected_before_attributes.keys)
+
+              if given == expected
+                true
+              else
+                @error = "Attributes before update [#{given}] did not match expected attributes [#{@expected_before_attributes}]"
+                false
+              end
             end
           end
 
           def has_correct_attributes_after
-            sliced_resource_attributes = @resource.attributes.with_indifferent_access.slice(*@expected_after_attributes.keys)
-            if @expected_after_attributes == sliced_resource_attributes
-              true
+            expected = @to
+            if @updating_block.present?
+              given = @updating_block.call(@resource)
+
+              if given == expected
+                return true
+              else
+                @error = "After update state [#{given.inspect}] did not match expected [#{expected.inspect}]"
+                return false
+              end
             else
-              @error = "Attributes after update [#{sliced_resource_attributes}] did not match expected attributes [#{@expected_after_attributes}]"
-              false
+              given = @resource.attributes.with_indifferent_access.slice(*@to.keys)
+              
+              if given == expected
+                true
+              else
+                @error = "Attributes after update [#{given}] did not match expected attributes [#{@expected_before_attributes}]"
+                false
+              end
             end
           end
 

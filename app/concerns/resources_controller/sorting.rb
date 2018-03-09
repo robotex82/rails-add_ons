@@ -11,8 +11,14 @@ module ResourcesController::Sorting
         raise "Possible SQL Injection attempt while trying to sort by #{params[:sort_by]} #{params[:sort_direction]}"
       end
 
+      sort_by        = params[:sort_by]
       sort_direction = (params[:sort_direction] || :asc)
-      base_scope.reorder("#{params[:sort_by]} #{sort_direction}")
+
+      if sort_by.include?('.')
+        base_scope.reorder("#{sort_by} #{sort_direction}")
+      else
+        base_scope.reorder(sort_by => sort_direction)
+      end
     else
       base_scope
     end
