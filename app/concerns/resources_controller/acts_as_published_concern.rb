@@ -8,7 +8,7 @@ module ResourcesController
 
       resource_labels = []
       @collection.each do |resource|
-        [:human, :name, :email, :to_s].each do |method_name|
+        [:human, :name, :title, :email, :to_s].each do |method_name|
           if resource.respond_to?(method_name)
             resource_labels << resource.send(method_name)
             break
@@ -31,7 +31,7 @@ module ResourcesController
 
       resource_labels = []
       @collection.each do |resource|
-        [:human, :name, :email, :to_s].each do |method_name|
+        [:human, :name, :title, :email, :to_s].each do |method_name|
           if resource.respond_to?(method_name)
             resource_labels << resource.send(method_name)
             break
@@ -55,11 +55,13 @@ module ResourcesController
       action_taken = @resource.published? ? 'published' : 'unpublished'
       
       resource_label = nil
-      [:human, :name, :email, :to_s].each do |method_name|
-        next unless @resource.respond_to?(method_name)
-        resource_label = @resource.send(method_name)
+      [:human, :name, :title, :email, :to_s].each do |method_name|
+        if @resource.respond_to?(method_name)
+          resource_label = @resource.send(method_name)
+          break
+        end
       end
-      
+
       if Rails.version < '5.0.0'
         redirect_to :back, notice: I18n.t("acts_as_published.notices.#{action_taken}", name: resource_label)
       else

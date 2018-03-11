@@ -1,15 +1,17 @@
-module ResourcesController::Kaminari
-  def self.included(base)
-    base.helper_method :paginate?
-  end
+module ResourcesController
+  module Kaminari
+    def self.included(base)
+      base.helper_method :paginate?
+    end
 
-  def paginate?
-    true
-  end
+    def paginate?
+      true
+    end
 
-  private
+    private
 
-  def load_collection
-    @collection = load_collection_scope.page(params[:page])
+    def load_collection
+      @collection = load_collection_scope.page(params[:page])
+    end
   end
 end

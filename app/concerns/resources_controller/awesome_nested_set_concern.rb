@@ -1,14 +1,13 @@
 module ResourcesController
-  module ActsAsListConcern
+  module AwesomeNestedSetConcern
     extend ActiveSupport::Concern
 
     def reposition
       @resource = load_resource
-      @dropped_resource = load_resource_scope.find(params[:dropped_id])
-      @dropped_resource.set_list_position(@resource.position)
-      position = @dropped_resource.position < @resource.position ? :before : :after
+      @dropped_resource = resource_class.find(params[:dropped_id])
+      @dropped_resource.move_to_right_of(@resource)
 
-      label_methods = [:human, :name, :title, :email, :to_s]
+      label_methods = [:human, :name, :email, :to_s]
 
       target_resource_label = nil
       label_methods.each do |method_name|
@@ -26,7 +25,7 @@ module ResourcesController
         end
       end
 
-      redirect_to collection_path, notice: I18n.t("acts_as_list.flash.actions.reposition.inserted_#{position}", target_resource: target_resource_label, inserted_resource: inserted_resource_label)
+      redirect_to collection_path, notice: I18n.t("awesome_nested_set.flash.actions.reposition.notice", target_resource: target_resource_label, inserted_resource: inserted_resource_label)
     end
   end
 end

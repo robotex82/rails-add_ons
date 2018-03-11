@@ -1,4 +1,4 @@
-module Controller
+module ResourcesController
   module FriendlyIdConcern
     extend ActiveSupport::Concern
 

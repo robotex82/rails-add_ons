@@ -1,17 +1,19 @@
-module ResourcesController::WillPaginate
-  extend ActiveSupport::Concern
+module ResourcesController
+  module WillPaginate
+    extend ActiveSupport::Concern
 
-  included do
-    helper_method :paginate?
-  end
+    included do
+      helper_method :paginate?
+    end
 
-  def paginate?
-    true
-  end
+    def paginate?
+      true
+    end
 
-  private
+    private
 
-  def load_collection
-    @collection = load_collection_scope.paginate(page: params[:page])
+    def load_collection
+      @collection = load_collection_scope.paginate(page: params[:page])
+    end
   end
 end
