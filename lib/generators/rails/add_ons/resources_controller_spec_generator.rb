@@ -7,6 +7,13 @@ module Rails
     #     rails g rails:add_ons:resources_controller_spec --uri /de/backend/uploads
     #       create  spec/features/de/backend/uploads_feature_spec.rb
     #
+    # If your resource class does not match the last part of your url (i.e.
+    # /de/posts would guess the resource class to Post) you can specify the resource
+    # name like this:
+    #
+    #     RESOURCE_CLASS=Blog::Post rails g rails:add_ons:resources_controller_spec --uri /de/posts
+    #       create  spec/features/de/posts_feature_spec.rb
+    #
     class ResourcesControllerSpecGenerator < Rails::Generators::Base
       desc 'Generates CRUDL specs for REST resources'
 
