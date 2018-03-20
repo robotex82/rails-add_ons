@@ -1,4 +1,12 @@
 module Component
+  # Example:
+  #
+  #     = collection_table(collection: @posts, resource_class: Post) do |t|
+  #       = t.column :id, sort: true
+  #       = t.column :title
+  #       = t.column :body
+  #       = t.timestamps format: :short
+  #
   class CollectionTable < Base
     include AwesomeNestedSetConcern
     include ActsAsPublishedConcern

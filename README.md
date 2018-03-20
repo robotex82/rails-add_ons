@@ -24,6 +24,10 @@ to your applications javascript include file, as it was removed.
 
 ServiceController::Base now uses the verbs new and create instead of invoke and call. Furthermore @resource is dropped in favor of @service. Please modify your controllers and views and routing accordingly.
 
+### Update path to 2.2.0
+
+Jquery and JQuery UJS are not automatically required anymore. You need to require it yourself.
+
 ## Installation
 Add this line to your application's Gemfile:
 

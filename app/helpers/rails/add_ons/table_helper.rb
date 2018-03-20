@@ -1,5 +1,15 @@
 module Rails
   module AddOns
+    # Provides helpers to render tables for collections and single resources.
+    # To use it you have to add it to your controller:
+    #
+    # Example:
+    #
+    #     class PostsController < ApplicationController
+    #       #...
+    #       helper Rails::AddOns::TableHelper
+    #     end
+    #
     module TableHelper
       def collection_table(options = {}, &block)
         Component::CollectionTable.new(self, options, &block).perform
