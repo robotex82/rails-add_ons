@@ -1,5 +1,7 @@
 module Component
   class ResourceTable < Base
+    include BooleanConcern
+
     attr_reader :resource
 
     def initialize(*args)
@@ -20,7 +22,7 @@ module Component
     end
 
     def timestamp(name, options = {}, &block)
-      options.reverse_merge!(render_as: :timestamp, format: nil)
+      options.reverse_merge!(render_as: :timestamp, format: Rails::AddOns::Configuration.table_default_timestamp_format)
       row(name, options, &block)
     end
 

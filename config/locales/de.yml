@@ -11,6 +11,10 @@ de:
       edit: Bearbeiten
       show: Anzeigen
     table:
+      body_cells:
+        boolean:
+          'true': Ja
+          'false': Nein
       header_cells:
         batch_actions:
           destroy: Löschen

@@ -1,7 +1,8 @@
-require "rails/add_ons/engine"
+require 'rails/add_ons/configuration'
+require 'rails/add_ons/engine'
 
 module Rails
   module AddOns
-    # Your code goes here...
+    extend Configuration
   end
 end

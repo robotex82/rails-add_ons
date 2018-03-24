@@ -5,6 +5,7 @@ module Component
   #       = t.column :id, sort: true
   #       = t.column :title
   #       = t.column :body
+  #       = t.boolean :visible
   #       = t.timestamps format: :short
   #
   class CollectionTable < Base
@@ -12,6 +13,7 @@ module Component
     include ActsAsPublishedConcern
     include ActsAsListConcern
     include BatchActionsConcern
+    include BooleanConcern
 
     SIZE_MAP = {
       default: nil,
@@ -38,7 +40,7 @@ module Component
     end
 
     def timestamp(name, options = {}, &block)
-      options.reverse_merge!(render_as: :timestamp, format: nil)
+      options.reverse_merge!(render_as: :timestamp, format: Rails::AddOns::Configuration.table_default_timestamp_format)
       column(name, options, &block)
     end
 
