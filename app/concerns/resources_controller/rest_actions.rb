@@ -27,13 +27,7 @@ module ResourcesController
     def edit; end
 
     def update
-      if Rails::VERSION::MAJOR < 4
-        @resource.update_attributes(permitted_params)
-      else
-        @resource.update(permitted_params)
-      end
-
-      if respond_to?(:after_update_location, true)
+      if @resource.send(update_method_name, permitted_params) && respond_to?(:after_update_location, true)
         respond_with(respond_with_namespace, @resource, location: after_update_location)
       else
         respond_with(respond_with_namespace, @resource)
@@ -50,8 +44,7 @@ module ResourcesController
     end
 
     def create
-      @resource.save
-      if respond_to?(:after_create_location, true)
+      if @resource.save && respond_to?(:after_create_location, true)
         respond_with(respond_with_namespace, @resource, location: after_create_location)
       else
         respond_with(respond_with_namespace, @resource)
@@ -59,6 +52,10 @@ module ResourcesController
     end
 
     private
+
+    def update_method_name
+      Rails::VERSION::MAJOR < 4 ? :update_attributes : :update
+    end
 
     def respond_with_namespace
       nil
