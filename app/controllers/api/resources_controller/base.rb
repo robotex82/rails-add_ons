@@ -1,6 +1,6 @@
 module Api
   module ResourcesController
-    class Base < ::ApiController
+    class Base < Rails::AddOns::Configuration.api_resources_controller_base_class_name.constantize
       module RestActions
         extend ActiveSupport::Concern
 

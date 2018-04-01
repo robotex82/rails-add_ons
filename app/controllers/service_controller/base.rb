@@ -1,5 +1,5 @@
 module ServiceController
-  class Base < ::FrontendController
+  class Base < Rails::AddOns::Configuration.service_controller_base_class_name.constantize
     layout 'rails/add_ons/application'
 
     include ServiceController::Service

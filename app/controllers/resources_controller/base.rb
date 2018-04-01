@@ -1,5 +1,5 @@
 module ResourcesController
-  class Base < ::FrontendController
+  class Base < Rails::AddOns::Configuration.resources_controller_base_class_name.constantize
     layout 'rails/add_ons/application'
 
     include RestActions
