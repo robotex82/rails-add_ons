@@ -26,7 +26,7 @@ module ServiceController::RestActions
     @result = execute_service
     if @result.success?
 
-      if respond_to?(:after_success_location, true)
+      if respond_to?(:after_success_location, true) && after_success_location.present?
         redirect_to(after_success_location, notice: success_message)
       else
         flash.now[:success] = success_message
