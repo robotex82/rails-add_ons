@@ -13,6 +13,7 @@ module ResourcesController
         before_action :load_resource, only: [:show, :edit, :destroy, :update]
         before_action :initialize_resource, only: [:new]
         before_action :initialize_resource_for_create, only: [:create]
+        before_action :before_rest_action, if: -> { respond_to?(:before_rest_action, true) }
       else
         before_filter :load_collection, only: [:index]
         before_filter :load_resource, only: [:show, :edit, :destroy, :update]
@@ -27,7 +28,7 @@ module ResourcesController
     def edit; end
 
     def update
-      if @resource.send(update_method_name, permitted_params) && respond_to?(:after_update_location, true)
+      if @resource.send(update_method_name, permitted_params) && respond_to?(:after_update_location, true) && after_update_location.present?
         respond_with(respond_with_namespace, @resource, location: after_update_location)
       else
         respond_with(respond_with_namespace, @resource)
@@ -36,7 +37,7 @@ module ResourcesController
 
     def destroy
       @resource.destroy
-      if respond_to?(:after_destroy_location, true)
+      if respond_to?(:after_destroy_location, true) && after_create_location.present?
         respond_with(respond_with_namespace, @resource, location: after_destroy_location)
       else
         respond_with(respond_with_namespace, @resource)
@@ -44,7 +45,7 @@ module ResourcesController
     end
 
     def create
-      if @resource.save && respond_to?(:after_create_location, true)
+      if @resource.save && respond_to?(:after_create_location, true) && after_create_location.present?
         respond_with(respond_with_namespace, @resource, location: after_create_location)
       else
         respond_with(respond_with_namespace, @resource)
