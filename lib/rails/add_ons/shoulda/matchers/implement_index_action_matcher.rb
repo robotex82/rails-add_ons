@@ -22,7 +22,9 @@ module Rails
           end
 
           def matches?(base_path)
-            @base_path = base_path
+            @base_path = @spec.class.name.split('::')[0..2].join('::').constantize.description
+            # @base_path     = base_path
+
             @spec.visit(@base_path)
             has_correct_status_code && has_correct_current_path
           end

@@ -87,7 +87,8 @@ module Rails
           end
 
           def matches?(base_path)
-            @base_path = base_path
+            @base_path = @spec.class.name.split('::')[0..2].join('::').constantize.description
+            # @base_path     = base_path
             @new_path = "#{@base_path}/new"
 
             @spec.visit(@new_path)
