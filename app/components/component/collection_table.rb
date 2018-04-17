@@ -49,6 +49,10 @@ module Component
       timestamp(:updated_at, options)
     end
 
+    # Example:
+    #
+    #     = table.association :category, sortable: true, label_method: :name, link_to: ->(r) { url_for(r.category) }
+    #
     def association(name, options = {}, &block)
       options.reverse_merge!(render_as: :association)
       column(name, options, &block)
