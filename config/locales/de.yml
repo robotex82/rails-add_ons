@@ -18,6 +18,12 @@ de:
       header_cells:
         batch_actions:
           destroy: Löschen
+  errors:
+    template:
+      services:
+        header:
+          one: "Konnte %{model} nicht ausführen: Ein Fehler"
+          other: "Konnte %{model} nicht ausführen: %{count} Fehler"
   flash:
     actions:
       create:
