@@ -2,6 +2,10 @@ module Component
   module CollectionTable::BatchActionsConcern
     extend ActiveSupport::Concern
 
+    # Example:
+    #
+    #     = table.batch_actions(actions: { destroy: url_for(action: :destroy_many) })
+    #
     def batch_actions(options = {}, &block)
       @wrap_in_form = true
       title = @view.render partial: 'component/table/header_cells/batch_actions', locals: { options: options }

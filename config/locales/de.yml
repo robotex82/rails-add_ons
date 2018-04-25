@@ -17,6 +17,7 @@ de:
           'false': Nein
       header_cells:
         batch_actions:
+          title: Stapelverarbeitung
           destroy: Löschen
   errors:
     template:
