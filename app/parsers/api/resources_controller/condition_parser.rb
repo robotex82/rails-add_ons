@@ -9,7 +9,8 @@ module Api
         lt_or_eq: :<=,
         lt:       :<,
         null:     :is_null,
-        not_null: :is_not_null
+        not_null: :is_not_null,
+        cont:     :like
       }
 
       def initialize(scope, field, condition)
@@ -26,11 +27,16 @@ module Api
         if is_a_condition?(parent_key) && !nested
           column, operator = extract_column_and_operator(parent_key)
           return handle_null_condition(column, operator) if is_null_operator?(operator)
-          if column_is_boolean?(column)
-            ["#{column} = ?", to_boolean(condition)]
+          if operator == 'cont'
+            return ["#{column} LIKE ?", "%#{normalized_condition(column, condition)}%"]
           else
-            ["#{column} = ?", condition]
+            return ["#{column} = ?", normalized_condition(column, condition)]
           end
+          # if column_is_boolean?(column)
+          #   ["#{column} = ?", to_boolean(condition)]
+          # else
+          #   ["#{column} = ?", condition]
+          # end
         else
           if nested
             column = extract_column(parent_key)
@@ -82,6 +88,7 @@ module Api
 
       def column_is_boolean?(column_name)
         scope, column = get_scope_and_column_from_column_name(column_name)
+        raise "Unkown column: #{column_name}" unless scope.columns_hash.has_key?(column_name)
         scope.columns_hash[column].type == :boolean
       end
 
@@ -96,7 +103,22 @@ module Api
       end
 
       def to_boolean(string)
-        ActiveRecord::ConnectionAdapters::Column.value_to_boolean(string)
+        case
+        when Rails.version < '4.2'
+          ::ActiveRecord::ConnectionAdapters::Column.value_to_boolean(string)
+        when Rails.version < '5.0'
+          ::ActiveRecord::Type::Boolean.new.type_cast_for_schema(string)
+        else
+          ::ActiveRecord::Type::Boolean.new.cast(string)
+        end
+      end
+
+      def normalized_condition(column, condition)
+        if column_is_boolean?(column)
+          to_boolean(condition)
+        else
+          condition
+        end
       end
     end
   end

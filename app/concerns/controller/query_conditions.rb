@@ -2,7 +2,13 @@ module Controller::QueryConditions
   private
 
   def add_conditions_from_query(scope)
-    query_params.each do |field, condition|
+    if query_params.keys.include?('q')
+      condition_params = normalize_query_params(query_params)
+    else
+      condition_params = query_params
+    end
+
+    condition_params.reject.reject { |k,v| v.blank? }.each do |field, condition|
       case field
       when 'limit'
         scope = scope.limit(condition.to_i)
@@ -30,5 +36,16 @@ module Controller::QueryConditions
 
   def default_query_params_exceptions
     %w(sort_by sort_direction utf8 commit page)
+  end
+
+  def normalize_query_params(params)
+    params['q'].each_with_object({}) { |(k, v), m| m[normalize_key(k)] = v }
+  end
+
+  def normalize_key(key)
+    splitted_key = key.split('_')
+    predicate = splitted_key.last
+    attribute = splitted_key[0..-2].join('_')
+    "#{attribute}(#{predicate})"
   end
 end
