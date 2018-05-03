@@ -103,7 +103,7 @@ module Api
       end
 
       def to_boolean(string)
-        case
+        result = case
         when Rails.version < '4.2'
           ::ActiveRecord::ConnectionAdapters::Column.value_to_boolean(string)
         when Rails.version < '5.0'
@@ -111,6 +111,7 @@ module Api
         else
           ::ActiveRecord::Type::Boolean.new.cast(string)
         end
+        result.gsub('"', '')
       end
 
       def normalized_condition(column, condition)

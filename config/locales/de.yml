@@ -84,3 +84,12 @@ de:
     pagination:
       last: '&#9654;'
       next: '&#9664;'
+  search_form_builder:
+    predicates:
+      cont: "%{attribute_name} enthält"
+      eq: "%{attribute_name} ist"
+    boolean_label: "%{attribute_name}?"
+    submit: Suchen
+    reset: Zurücksetzen
+    'yes': Ja
+    'no': Nein
