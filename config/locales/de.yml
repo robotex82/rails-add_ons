@@ -10,6 +10,7 @@ de:
       delete: Löschen
       edit: Bearbeiten
       show: Anzeigen
+      download: Download
     table:
       body_cells:
         boolean:
