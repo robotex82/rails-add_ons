@@ -17,6 +17,7 @@ module ResourcesController
     def store_location
       return if request.referer.nil?
       truncate_location_history(9)
+      puts "[LocationHistoryConcern] Storing last location [#{request.referer}]"
       location_history[Time.zone.now] = request.referer
     end
 
