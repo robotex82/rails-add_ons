@@ -37,7 +37,7 @@ module ResourcesController
 
     def destroy
       @resource.destroy
-      if respond_to?(:after_destroy_location, true) && after_create_location.present?
+      if respond_to?(:after_destroy_location, true) && after_destroy_location.present?
         respond_with(respond_with_namespace, @resource, location: after_destroy_location)
       else
         respond_with(respond_with_namespace, @resource)
