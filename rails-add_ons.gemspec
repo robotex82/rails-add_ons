@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "twitter-bootstrap-components-rails"
   s.add_development_dependency "responders"
+  s.add_development_dependency "pry-rails"
   
   s.add_dependency "haml-rails"
   s.add_dependency "font-awesome-rails"

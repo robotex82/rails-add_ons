@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rails-add_ons (2.1.1)
+    rails-add_ons (3.0.0.pre1)
       font-awesome-rails
       haml-rails
       rails (>= 3.2)
@@ -44,8 +44,8 @@ GEM
     diff-lcs (1.3)
     erubis (2.7.0)
     ffi (1.9.18)
-    font-awesome-rails (4.7.0.1)
-      railties (>= 3.2, < 5.1)
+    font-awesome-rails (4.7.0.4)
+      railties (>= 3.2, < 6.0)
     formatador (0.2.5)
     guard (2.14.1)
       formatador (>= 0.2.4)
@@ -99,6 +99,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-rails (0.3.6)
+      pry (>= 0.10.4)
     rack (1.4.7)
     rack-cache (1.7.0)
       rack (>= 0.4)
@@ -183,6 +185,7 @@ PLATFORMS
 DEPENDENCIES
   guard-bundler
   guard-rspec
+  pry-rails
   rails (~> 3.2)
   rails-add_ons!
   responders
@@ -192,4 +195,4 @@ DEPENDENCIES
   twitter-bootstrap-components-rails
 
 BUNDLED WITH
-   1.14.6
+   1.16.3

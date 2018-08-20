@@ -10,6 +10,7 @@ require "sprockets/railtie"
 
 Bundler.require(*Rails.groups)
 require "responders"
+require "pry-rails"
 require "rails-add_ons"
 
 module Dummy
