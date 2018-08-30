@@ -112,11 +112,16 @@ module Rails
           end
 
           def has_correct_status_code
-            if @spec.status_code == 200
-              true
-            else
-              @error = "Wrong status code [#{@spec.status_code}] instead of [200]"
-              false
+            begin
+              if @spec.status_code == 200
+                true
+              else
+                @error = "Wrong status code [#{@spec.status_code}] instead of [200]"
+                false
+              end
+            rescue Capybara::NotSupportedByDriverError => e
+              puts "[Warning] Skipping status code check as it is not supported by your driver [#{@spec.driver.instance_variable_get(:@name)}]."
+              return true
             end
           end
 
