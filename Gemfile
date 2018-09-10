@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# Declare your gem's dependencies in rails-add_ons.gemspec.
+# Declare your gem's dependencies in rails_add_ons.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
 gemspec
@@ -12,5 +12,3 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
-gem 'rails',     '~> 3.2'
-gem 'test-unit', '~> 3.0'

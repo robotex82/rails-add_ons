@@ -1,38 +1,14 @@
-# Rails::AddOns
+# RailsAddOns
 Short description and motivation.
 
 ## Usage
 How to use my plugin.
 
-### with bootstrap-sass
-
-You have to add
-
-    //= require bootstrap-sprockets
-
-to your applications javascript include file to use bootstrap-sass.
-
-### Update path to 1.0.0
-
-You may want to add
-
-    //= require tether
-
-to your applications javascript include file, as it was removed.
-
-### Update path to 2.0.0
-
-ServiceController::Base now uses the verbs new and create instead of invoke and call. Furthermore @resource is dropped in favor of @service. Please modify your controllers and views and routing accordingly.
-
-### Update path to 2.2.0
-
-Jquery and JQuery UJS are not automatically required anymore. You need to require it yourself.
-
 ## Installation
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rails-add_ons'
+gem 'rails_add_ons'
 ```
 
 And then execute:
@@ -42,7 +18,7 @@ $ bundle
 
 Or install it yourself as:
 ```bash
-$ gem install rails-add_ons
+$ gem install rails_add_ons
 ```
 
 ## Contributing

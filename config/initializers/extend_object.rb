@@ -1,1 +1,0 @@
-Object.send(:include, ObjectExtensions)
