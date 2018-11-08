@@ -5,7 +5,7 @@ require_relative "../lib/rails/add_ons/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "rails-add_ons-resources_controller"
+  s.name        = "rails-add_ons-service"
   s.version     = Rails::AddOns::VERSION
   s.authors     = ["Roberto Vasquez Angel"]
   s.email       = ["roberto.vasquez@enermarket.de"]
