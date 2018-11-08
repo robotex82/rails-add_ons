@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name        = "rails-add_ons-resources_controller"
   s.version     = Rails::AddOns::VERSION
   s.authors     = ["Roberto Vasquez Angel"]
-  s.email       = ["roberto.vasquez@enermarket.de"]
+  s.email       = ["roberto@vasquez-angel.de"]
   s.homepage    = "https://github.com/rails-add_ons"
   s.summary     = "Services for Ruby on Rails."
   s.license     = "MIT"
