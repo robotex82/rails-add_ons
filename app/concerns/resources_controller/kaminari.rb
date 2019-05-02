@@ -16,7 +16,8 @@ module ResourcesController
 
     def per_page
       if [nil, 'all'].include?(params[:per_page])
-        load_collection_scope.count
+        count = load_collection_scope.count
+        count > 0 ? count : nil
       else
         Rails::AddOns::Configuration.pagination_per_page_default
       end
